@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --------------------
+# Configuration Section
+# --------------------
+
 # System Update
 sudo apt update
 
@@ -10,40 +14,57 @@ get_ubuntu_version() {
   echo "$version"
 }
 
+# Function to display colored output
+print_message() {
+    local color=$1
+    local message=$2
+    case $color in
+        green) echo -e "\033[32m$message\033[0m" ;;
+        red) echo -e "\033[31m$message\033[0m" ;;
+        yellow) echo -e "\033[33m$message\033[0m" ;;
+        *) echo "$message" ;;
+    esac
+}
+
+# Function to install system dependencies
+install_system_deps() {
+    sudo apt-get install -y \
+        curl \
+        build-essential \
+        wget \
+        gpg \
+        apt-transport-https \
+        ca-certificates \
+        software-properties-common \
+        lsb-release
+}
 
 # --------------------
 # Installation Functions
 # --------------------
 
 # Function to install python3-pip
-install_pip() {
-  echo "Installing python3-pip..."
-  sudo apt install -y python3-pip
-
-  echo "Python3-pip installation completed!"
-}
-
-# Function to install python3-venv
-install_venv() {
-  echo "Installing python3-venv..."
-  sudo apt install -y python3-venv
-
-  echo "Python3-venv installation completed!"
+install_python_tools() {
+    print_message yellow "Installing Python tools..."
+    sudo apt-get install -y \
+        python3-pip \
+        python3-venv \
 }
 
 # Function to install python-poetry
 install_poetry() {
-  echo "Installing python-poetry..."
+  print_message yellow "Installing Poetry..."
+  
   curl -sSL https://install.python-poetry.org | python3 -
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
   poetry config virtualenvs.in-project true
 
-  echo "Poetry installation completed!"
+  print_message green "Poetry installed successfully."
 }
 
 # Function to install pyenv
 install_pyenv() {
-  echo "Installing pyenv..."
+  print_message yellow "Installing pyenv..."
   
   sudo apt-get install -y libssl-dev
   curl https://pyenv.run | bash
@@ -51,31 +72,33 @@ install_pyenv() {
   echo 'eval "$(pyenv init -)"' >> ~/.bashrc
   echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
 
-  echo "Pyenv installation completed!"
+  print_message green "pyenv installed successfully."
 }
 
 # Function to install neovim
 install_neovim() {
-  echo "Installing neovim..."
+  print_message yellow "Installing Neovim..."
+
   curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
   rm -rf /opt/nvim
   sudo tar -C /opt -xzf nvim-linux64.tar.gz
   echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc
 
-  echo "NeoVim installation completed!"
+  print_message green "Neovim installed successfully."
 }
 
 # Install xclip: A clipboard for Neovim
 install_xclip() {
-  echo "Installing xclip..."
+  print_message yellow "Installing xclip..."
+
   sudo apt install -y xclip
 
-  echo "xClip installation completed!"
+  print_message green "xClip installed successfully."
 }
 
 # Install Postman
 install_postman() {
-  echo "Installing Postman..."
+  print_message yellow "Installing postman..."
 
   POSTMAN_URL="https://dl.pstmn.io/download/latest/linux64"
   INSTALL_DIR="/opt/postman"
@@ -104,24 +127,26 @@ install_postman() {
   Type=Application
   Categories=Development;" > "$CURRENT_USER_HOME/.local/share/applications/Postman.desktop"
 
-  echo "Postman installation completed!"
+  print_message green "Postman installed successfully."
 }
 
 # Install Brave Browser
 install_brave() {
-  echo "Installing Brave Browser..."
+  print_message yellow "Installing Brave browser..."
+
   sudo apt install -y apt-transport-https curl
   sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
   sudo apt update
   sudo apt install -y brave-browser
 
-  echo "Brave browser installation completed!"
+  print_message green "Brave browser installed successfully."
 }
 
 # Install Visual Studio Code
 install_vscode() {
-  echo "Installing Visual Studio Code..."
+  print_message yellow "Installing Visual Studio Code..."
+
   sudo apt-get install -y wget gpg
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
   sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
@@ -131,20 +156,22 @@ install_vscode() {
   sudo apt update
   sudo apt install -y code # or code-insiders
 
-  echo "VSCode installation completed!"
+  print_message green "Visual Studio Code installed successfully."
 }
 
 # Install Git
 install_git() {
-  echo "Installing Git..."
+  print_message yellow "Installing Git..."
+
   sudo apt install -y git
 
-  echo "Git installation completed!"
+  print_message green "Git installed successfully."
 }
 
 # Function to install the latest version of Obsidian
 install_obsidian() {
-  echo "Installing Obsidian..."
+  print_message yellow "Installing Obsidian..."
+  
   latest_release=$(curl -s https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest)
   download_url=$(echo "$latest_release" | grep browser_download_url | grep amd64.deb | cut -d '"' -f 4)
   version_name=$(echo "$latest_release" | grep tag_name | cut -d '"' -f 4)
@@ -152,12 +179,13 @@ install_obsidian() {
   sudo dpkg -i "obsidian-${version_name}-amd64.deb"
   rm "obsidian-${version_name}-amd64.deb"
   
-  echo "Obsidian ${version_name} has been installed successfully."
+  print_message green "Obsidian installed successfully."
 }
 
 # Install Docker
 install_docker() {
-  echo "Installing Docker..."
+  print_message yellow "Installing Docker..."
+
   sudo apt-get update
   sudo apt-get install -y ca-certificates curl
   sudo install -m 0755 -d /etc/apt/keyrings
@@ -171,30 +199,34 @@ install_docker() {
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   sudo usermod -aG docker $USER
 
-  echo "Docker installation completed!"
+  print_message green "Docker installed successfully."
 }
 
 # Function to install Zoom
 install_zoom() {
-  echo "Installing Zoom..."
+  print_message yellow "Installing Zoom..."
+
   wget https://zoom.us/client/latest/zoom_amd64.deb
   sudo dpkg -i zoom_amd64.deb
   sudo apt-get install -f
   rm zoom_amd64.deb
-  echo "Zoom installation completed!"
+  
+  print_message green "Zoom installed successfully."
 }
 
 # Function to install Flameshot
 install_flameshot() {
-  echo "Installing Flameshot..."
+  print_message yellow "Installing Flameshot..."
+
   sudo apt install -y flameshot
 
-  echo "Flameshot installation completed!"
+  print_message green "Flameshot installed successfully."
 }
 
 
 install_cuda() {
-  echo "Checking Ubuntu version..."
+  print_message yellow "Installing NVIDIA CUDA Toolkit..."
+
   UBUNTU_VERSION=$(get_ubuntu_version)
   echo "Detected Ubuntu version: $UBUNTU_VERSION"
   
@@ -230,25 +262,28 @@ install_cuda() {
   echo "export LD_LIBRARY_PATH=/usr/local/cuda-${CUDA_VERSION}/lib64" >> ~/.bashrc
   echo "export CUDA_HOME=/usr/local/cuda-${CUDA_VERSION}" >> ~/.bashrc
   source ~/.bashrc
+
+  print_message green "NVIDIA CUDA Toolkit installed successfully."
 }
 
 # Function to install Tmux
 install_tmux() {
-  echo "Installing Tmux..."
+  print_message yellow "Installing Tmux..."
+
   sudo apt install -y tmux
 
-  echo "Tmux installation completed!"
+  print_message green "Tmux installed successfully."
 }
 
 # Function to install Vagrant
 install_vagrant() {
-  echo "Installing Vagrant..."
+  print_message yellow "Installing Vagrant..."
   
   wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
   sudo apt update && sudo apt install vagrant
 
-  echo "Vagrant installation completed!"
+  print_message green "Vagrant installed successfully."
 }
 
 # --------------------
@@ -257,8 +292,7 @@ install_vagrant() {
 
 # List of all the packages
 packages=(
-  "python3-pip,install_pip"
-  "python3-venv,install_venv"
+  "python3-tools,install_python_tools"
   "python-poetry,install_poetry"
   "pyenv,install_pyenv"
   "neovim,install_neovim"
