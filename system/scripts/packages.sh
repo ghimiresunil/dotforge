@@ -292,6 +292,7 @@ install_vagrant() {
 
 # List of all the packages
 packages=(
+  "install_deps,install_system_deps"
   "python3-tools,install_python_tools"
   "python-poetry,install_poetry"
   "pyenv,install_pyenv"
