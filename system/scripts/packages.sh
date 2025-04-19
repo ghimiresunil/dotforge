@@ -228,12 +228,24 @@ install_cuda() {
 }
 
 # Function to install Tmux
-install_flameshot() {
+install_tmux() {
   echo "Installing Tmux..."
   sudo apt install -y tmux
 
   echo "Tmux installation completed!"
 }
+
+# Function to install Vagrant
+install_vagrant() {
+  echo "Installing Vagrant..."
+  
+  wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+  sudo apt update && sudo apt install vagrant
+
+  echo "Vagrant installation completed!"
+}
+
 
 
 # List of all the packages
@@ -254,6 +266,7 @@ packages=(
   "flameshot, install_flameshot"
   "cuda,install_cuda"
   "tmux,install_tmux"
+  "vagrant,install_vagrant"
 )
 
 # Ask user if they want to install all packages
