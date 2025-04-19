@@ -227,6 +227,15 @@ install_cuda() {
   source ~/.bashrc
 }
 
+# Function to install Tmux
+install_flameshot() {
+  echo "Installing Tmux..."
+  sudo apt install -y tmux
+
+  echo "Tmux installation completed!"
+}
+
+
 # List of all the packages
 packages=(
   "python3-pip,install_pip"
@@ -244,6 +253,7 @@ packages=(
   "zoom,install_zoom"
   "flameshot, install_flameshot"
   "cuda,install_cuda"
+  "tmux,install_tmux"
 )
 
 # Ask user if they want to install all packages
