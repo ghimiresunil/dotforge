@@ -10,6 +10,11 @@ get_ubuntu_version() {
   echo "$version"
 }
 
+
+# --------------------
+# Installation Functions
+# --------------------
+
 # Function to install python3-pip
 install_pip() {
   echo "Installing python3-pip..."
@@ -246,7 +251,9 @@ install_vagrant() {
   echo "Vagrant installation completed!"
 }
 
-
+# --------------------
+# Menu of Packages
+# --------------------
 
 # List of all the packages
 packages=(
@@ -289,5 +296,5 @@ else
   done
 fi
 
-echo "Installation complete."
+echo "✅ All selected installations completed!"
 
