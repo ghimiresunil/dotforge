@@ -17,7 +17,9 @@ alias g="git"
 alias nvc="cd ~/.config/nvim/"
 
 # Alias for ls using `eza`
-
+alias ls='eza --icons -F --group-directories-first'
+alias ll='eza -lhF --icons --git --group-directories-first --no-user --no-time'
+alias lt='eza --tree --git'
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
