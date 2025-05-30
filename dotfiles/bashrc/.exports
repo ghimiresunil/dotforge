@@ -1,0 +1,8 @@
+# ~/.bash_exports
+
+# Extend PATH
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export MANPAGER="nvim +Man!"
+export EDITOR="nvim"
+export VISUAL="nvim"
+export DISABLE_AUTO_TITLE='true'
