@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# List all outputs currently connected
+connected_outputs=$(xrandr --query | grep " connected" | cut -d' ' -f1)
+
+# List all workspaces and their outputs (requires i3-msg)
+workspaces=$(i3-msg -t get_workspaces)
+
+for output in $(echo "$workspaces" | jq -r '.[] | select(.output != null) | "\(.name) \(.output)"'); do
+    ws_name=$(echo $output | cut -d' ' -f1)
+    ws_output=$(echo $output | cut -d' ' -f2)
+    # If the workspace output is no longer connected
+    if ! echo "$connected_outputs" | grep -q "^$ws_output$"; then
+        # Move workspace to primary output (e.g., eDP-1)
+        i3-msg "workspace $ws_name; move workspace to output eDP-1"
+    fi
+done
