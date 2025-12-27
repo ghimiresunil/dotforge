@@ -2,3 +2,4 @@
 - include_tasks: apps.yml
 - include_tasks: deployment.yml
 - include_tasks: fzf.yml
+- include_tasks: python.yml
