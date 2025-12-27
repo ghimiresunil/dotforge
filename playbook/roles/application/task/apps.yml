@@ -32,6 +32,22 @@
   become_method: sudo
   when: vscode_deb.rc == 1
 
-- name: Download postman
-  get_url: url="https://dl.pstmn.io/download/latest/linux64"
-    dest="/{{ lookup('env', 'HOME') }}/Downloads/Postman/
+- name: Check if Postman is installed
+  command: which postman
+  register: postman_check
+  failed_when: postman_check.rc > 1
+  changed_when: postman_check.rc == 1
+
+- name: Download Postman
+  get_url:
+    url: "https://dl.pstmn.io/download/latest/linux64"
+    dest: "/{{ lookup('env','HOME') }}/Downloads/postman.tar.gz"
+  when: postman_check.rc == 1
+
+- name: Extract Postman
+  unarchive:
+    src: "/{{ lookup('env','HOME') }}/Downloads/postman.tar.gz"
+    dest: /opt
+    remote_src: yes
+  become: yes
+  when: postman_check.rc == 1
