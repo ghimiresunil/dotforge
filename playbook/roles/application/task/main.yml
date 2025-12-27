@@ -1,2 +1,3 @@
 ---
 - include_tasks: apps.yml
+- include_tasks: deployment.yml
