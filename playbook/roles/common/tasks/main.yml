@@ -1,0 +1,26 @@
+---
+- name: Install general dependencies via package manager
+  package:
+    name: "{{ item }}"
+    state: "latest"
+  with_items:
+    - cmake
+    - cowsay
+    - git
+    - neofetch
+    - ranger
+    - ripgrep
+    - tldr
+    - tmux
+    - tree
+    - xclip
+    - zsh
+    - curl
+    - wget
+    - brightnessctl
+    - zoxide
+    - eza
+  become: yes
+
+- include_tasks: ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
