@@ -32,22 +32,27 @@
   become_method: sudo
   when: vscode_deb.rc == 1
 
-- name: Check if Postman is installed
-  command: which postman
-  register: postman_check
-  failed_when: postman_check.rc > 1
-  changed_when: postman_check.rc == 1
+- name: Check if postman exists
+  stat:
+    path: /usr/local/bin/postman
+  register: has_postman
 
-- name: Download Postman
-  get_url:
-    url: "https://dl.pstmn.io/download/latest/linux64"
-    dest: "/{{ lookup('env','HOME') }}/Downloads/postman.tar.gz"
-  when: postman_check.rc == 1
+- name: Download postman
+  get_url: url="https://dl.pstmn.io/download/latest/linux64"
+    dest="/{{ lookup('env','HOME') }}/Downloads/Postman.tar.gz"
+  when: not has_postman.stat.exists
 
-- name: Extract Postman
-  unarchive:
-    src: "/{{ lookup('env','HOME') }}/Downloads/postman.tar.gz"
-    dest: /opt
-    remote_src: yes
+- name: Extract Postman.tar.gz to opt
+  unarchive: src="/{{ lookup('env','HOME') }}/Downloads/Postman.tar.gz"
+    dest="/opt"
   become: yes
-  when: postman_check.rc == 1
+  become_method: sudo
+  when: not has_postman.stat.exists
+
+- name: Create symlinks for public files
+  file:
+    src: "/opt/Postman/Postman"
+    dest: "/usr/local/bin/postman"
+    state: link
+    force: yes
+  when: not has_postman.stat.exists
