@@ -1,9 +1,8 @@
 - name: Install docker dependencies
   become: yes
-  become_method: sudo
   apt:
     name: "{{ item }}"
-    state: "latest"
+    state: latest
     update_cache: yes
   loop:
     - apt-transport-https
@@ -12,21 +11,25 @@
     - gnupg-agent
     - software-properties-common
 
-- name: add docker GPG key
-  apt_key:
+- name: Add Docker GPG key
+  become: yes
+  get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+    dest: /usr/share/keyrings/docker-archive-keyring.gpg
+    mode: "0644"
 
-- name: get the current ubuntu version
+- name: Get the current Ubuntu version
   shell: lsb_release -cs
   register: ubuntu_name
 
-- name: add docker apt repository
+- name: Add Docker apt repository
+  become: yes
   apt_repository:
-    repo: "deb https://download.docker.com/linux/ubuntu {{ ubuntu_name.stdout}} stable"
+    repo: "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ubuntu_name.stdout }} stable"
     state: present
 
-- name: install docker, cli and containerd.io
+- name: Install Docker, CLI, and containerd.io
+  become: yes
   apt:
     name: "{{ item }}"
     state: latest
@@ -36,7 +39,6 @@
     - docker-ce-cli
     - containerd.io
 
-- name: Non-root docker privelage
+- name: Add user to docker group
   become: yes
-  become_method: sudo
   command: usermod -aG docker {{ lookup('env','USER') }}
