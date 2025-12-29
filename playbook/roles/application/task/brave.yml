@@ -1,0 +1,42 @@
+- name: Check if Brave is installed
+  command: brave-browser --version
+  register: brave_check
+  ignore_errors: yes
+  changed_when: false
+
+- name: Ensure apt-transport-https and curl are installed
+  apt:
+    name:
+      - apt-transport-https
+      - curl
+    state: present
+  become: yes
+  when: brave_check.rc != 0
+
+- name: Add Brave GPG key
+  ansible.builtin.apt_key:
+    url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    keyring: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    state: present
+  become: yes
+  when: brave_check.rc != 0
+
+- name: Add Brave repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+    state: present
+  become: yes
+  when: brave_check.rc != 0
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  become: yes
+  when: brave_check.rc != 0
+
+- name: Install Brave browser
+  apt:
+    name: brave-browser
+    state: present
+  become: yes
+  when: brave_check.rc != 0
