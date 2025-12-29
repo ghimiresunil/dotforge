@@ -1,42 +1,70 @@
-- name: Install docker dependencies
+- name: Install Docker on Ubuntu
+  hosts: localhost
   become: yes
-  become_method: sudo
-  apt:
-    name: "{{ item }}"
-    state: "latest"
-    update_cache: yes
-  loop:
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - gnupg-agent
-    - software-properties-common
+  tasks:
+    - name: Install Docker dependencies
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
 
-- name: add docker GPG key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+    - name: Create keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
 
-- name: get the current ubuntu version
-  shell: lsb_release -cs
-  register: ubuntu_name
+    - name: Add Docker GPG key (keyring method)
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+        | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
 
-- name: add docker apt repository
-  apt_repository:
-    repo: "deb https://download.docker.com/linux/ubuntu {{ ubuntu_name.stdout}} stable"
-    state: present
+    - name: Set correct permissions on Docker GPG key
+      file:
+        path: /etc/apt/keyrings/docker.gpg
+        mode: "0644"
 
-- name: install docker, cli and containerd.io
-  apt:
-    name: "{{ item }}"
-    state: latest
-    update_cache: yes
-  loop:
-    - docker-ce
-    - docker-ce-cli
-    - containerd.io
+    - name: Get Ubuntu codename
+      command: lsb_release -cs
+      register: ubuntu_codename
 
-- name: Non-root docker privelage
-  become: yes
-  become_method: sudo
-  command: usermod -aG docker {{ lookup('env','USER') }}
+    - name: Add Docker apt repository
+      apt_repository:
+        repo: >
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg]
+          https://download.docker.com/linux/ubuntu
+          {{ ubuntu_codename.stdout }} stable
+        state: present
+        filename: docker
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker Engine
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+
+    - name: Enable and start Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        groups: docker
+        append: yes
