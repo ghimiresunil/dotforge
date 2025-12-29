@@ -56,4 +56,5 @@
     dest: "/usr/local/bin/postman"
     state: link
     force: yes
+  become: yes
   when: not has_postman.stat.exists
