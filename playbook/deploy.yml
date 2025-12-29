@@ -1,7 +1,8 @@
 ---
-- hosts: 127.0.0.1
+- hosts: localhost
   connection: local
+  become: yes
 
   roles:
-    - { role: common, become:yes }
-    - { role: applications, become:yes }
+    - common
+    - applications
