@@ -1,0 +1,37 @@
+- name: Check if Obsidian is installed
+  command: obsidian --version
+  register: obsidian_check
+  ignore_errors: yes
+  changed_when: false
+
+- name: Get latest Obsidian release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest
+    return_content: yes
+  register: obsidian_release
+  when: obsidian_check.rc != 0
+
+- name: Set download URL and version
+  ansible.builtin.set_fact:
+    obsidian_download_url: "{{ (obsidian_release.content | from_json).assets | selectattr('name', 'search', 'amd64.deb') | map(attribute='browser_download_url') | first }}"
+    obsidian_version: "{{ (obsidian_release.content | from_json).tag_name }}"
+  when: obsidian_check.rc != 0
+
+- name: Download Obsidian .deb
+  ansible.builtin.get_url:
+    url: "{{ obsidian_download_url }}"
+    dest: "{{ lookup('env','HOME') }}/Downloads/obsidian-{{ obsidian_version }}-amd64.deb"
+    mode: "0644"
+  when: obsidian_check.rc != 0
+
+- name: Install Obsidian .deb
+  ansible.builtin.apt:
+    deb: "{{ lookup('env','HOME') }}/Downloads/obsidian-{{ obsidian_version }}-amd64.deb"
+  become: yes
+  when: obsidian_check.rc != 0
+
+- name: Remove downloaded Obsidian .deb
+  ansible.builtin.file:
+    path: "{{ lookup('env','HOME') }}/Downloads/obsidian-{{ obsidian_version }}-amd64.deb"
+    state: absent
+  when: obsidian_check.rc != 0
