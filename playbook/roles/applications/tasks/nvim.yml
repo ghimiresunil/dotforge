@@ -10,12 +10,17 @@
     dest: "{{ lookup('env','HOME') }}/Downloads/nvim-linux-x86_64.tar.gz"
   when: nvim_check.rc != 0
 
-- name: Remove old Neovim installation
+- name: Check if /opt/nvim exists
+  stat:
+    path: /opt/nvim
+  register: nvim_dir
+
+- name: Remove old Neovim installation if it exists
   file:
     path: /opt/nvim
     state: absent
   become: yes
-  when: nvim_check.rc != 0
+  when: nvim_dir.stat.exists
 
 - name: Extract Neovim
   unarchive:
