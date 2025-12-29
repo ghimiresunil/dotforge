@@ -50,7 +50,7 @@
   become_method: sudo
   when: not has_postman.stat.exists
 
-- name: Create symlinks for public files
+- name: Create symlinks for Postman
   file:
     src: "/opt/Postman/Postman"
     dest: "/usr/local/bin/postman"
