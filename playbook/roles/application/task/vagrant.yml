@@ -1,0 +1,33 @@
+- name: Check if Vagrant is installed
+  command: vagrant --version
+  register: vagrant_check
+  ignore_errors: yes
+  changed_when: false
+
+- name: Add HashiCorp GPG key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    state: present
+  become: yes
+  when: vagrant_check.rc != 0
+
+- name: Add HashiCorp repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main"
+    state: present
+  become: yes
+  when: vagrant_check.rc != 0
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  become: yes
+  when: vagrant_check.rc != 0
+
+- name: Install Vagrant
+  apt:
+    name: vagrant
+    state: present
+  become: yes
+  when: vagrant_check.rc != 0
