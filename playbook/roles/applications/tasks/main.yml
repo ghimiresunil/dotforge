@@ -5,7 +5,6 @@
 - include_tasks: node.yml
 - include_tasks: tmux.yml
 - include_tasks: nvim.yml
-- include_tasks: vagrant.yml
 - include_tasks: obsidian.yml
 - include_tasks: brave.yml
 - include_tasks: fzf.yml
