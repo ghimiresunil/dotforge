@@ -1,0 +1,13 @@
+- name: Install dotfiles specific
+  package:
+    name: "{{ item }}"
+    state: "latest"
+  become: yes
+  with_items:
+    - nvim
+
+- import_tasks: symlinks.yml
+  become: no
+  vars:
+    srcBase: "{{ lookup('env', 'HOME') }}"
+    dstBase: "{{ lookup('env', 'HOME') }}"

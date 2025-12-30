@@ -1,0 +1,9 @@
+---
+- name: Create symlinks for public files
+  file:
+    src: "{{srcBase }}/.dotfiles/{{ item.src }}"
+    dest: "{{ srcBase }}/{{ item.dst }}"
+    state: link
+    force: yes
+  with_items:
+    - { src: "nvim/.config/nvim", dst: ".config/nvim" }
