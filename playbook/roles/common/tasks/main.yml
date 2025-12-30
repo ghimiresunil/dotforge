@@ -21,6 +21,7 @@
     - zoxide
     - eza
     - flameshot
+    - fzf
   become: yes
 
 - include_tasks: ubuntu.yml
