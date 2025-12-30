@@ -1,13 +1,33 @@
-- name: Ensure HashiCorp GPG key exists
-  ansible.builtin.get_url:
-    url: https://apt.releases.hashicorp.com/gpg
-    dest: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+- name: Ensure dependencies for gpg exist
+  apt:
+    name:
+      - gpg
+      - ca-certificates
+      - curl
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Download and install HashiCorp GPG key (dearmored)
+  shell: |
+    curl -fsSL https://apt.releases.hashicorp.com/gpg \
+    | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  become: yes
+
+- name: Set permissions on HashiCorp keyring
+  file:
+    path: /usr/share/keyrings/hashicorp-archive-keyring.gpg
     mode: "0644"
   become: yes
 
-- name: Ensure HashiCorp repository exists
-  ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main"
+- name: Add HashiCorp repository
+  apt_repository:
+    repo: >
+      deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg]
+      https://apt.releases.hashicorp.com
+      {{ ansible_lsb.codename }} main
     state: present
   become: yes
 
