@@ -1,7 +1,6 @@
 ---
 - include_tasks: apps.yml
 - include_tasks: deployment.yml
-- include_tasks: fzf.yml
 - include_tasks: python.yml
 - include_tasks: node.yml
 - include_tasks: tmux.yml
@@ -9,3 +8,4 @@
 - include_tasks: vagrant.yml
 - include_tasks: obsidian.yml
 - include_tasks: brave.yml
+- include_tasks: fzf.yml
