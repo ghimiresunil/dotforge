@@ -1,47 +1,42 @@
-- name: Check if Neovim is installed
-  command: nvim --version
-  register: nvim_check
-  ignore_errors: yes
-  changed_when: false
+- name: Check if Neovim is already installed
+  stat:
+    path: /opt/nvim/bin/nvim
+  register: nvim_bin
 
 - name: Download Neovim tar.gz
   get_url:
     url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-    dest: "{{ lookup('env','HOME') }}/Downloads/nvim-linux-x86_64.tar.gz"
-  when: nvim_check.rc != 0
+    dest: /tmp/nvim-linux-x86_64.tar.gz
+    mode: "0644"
+  when: not nvim_bin.stat.exists
 
-- name: Check if /opt/nvim exists
-  stat:
-    path: /opt/nvim
-  register: nvim_dir
-
-- name: Remove old Neovim installation if it exists
+- name: Remove old Neovim installation
   file:
     path: /opt/nvim
     state: absent
   become: yes
-  when: nvim_dir.stat.exists
+  when: not nvim_bin.stat.exists
 
-- name: Ensure /opt/nvim directory exists
+- name: Create /opt/nvim directory
   file:
     path: /opt/nvim
     state: directory
     mode: "0755"
   become: yes
-  when: nvim_check.rc != 0
+  when: not nvim_bin.stat.exists
 
 - name: Extract Neovim
   unarchive:
-    src: "{{ lookup('env','HOME') }}/Downloads/nvim-linux-x86_64.tar.gz"
+    src: /tmp/nvim-linux-x86_64.tar.gz
     dest: /opt/nvim
     remote_src: yes
     extra_opts: [--strip-components=1]
   become: yes
-  when: nvim_check.rc != 0
+  when: not nvim_bin.stat.exists
 
-- name: Ensure Neovim bin path is in bashrc
-  lineinfile:
-    path: "{{ lookup('env','HOME') }}/.bashrc"
-    line: 'export PATH="$PATH:/opt/nvim/bin"'
-    state: present
-  when: nvim_check.rc != 0
+- name: Ensure nvim is globally available
+  file:
+    src: /opt/nvim/bin/nvim
+    dest: /usr/local/bin/nvim
+    state: link
+  become: yes
