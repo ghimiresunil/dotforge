@@ -3,8 +3,7 @@
     name: "{{ item }}"
     state: "latest"
   become: yes
-  with_items:
-    - nvim
+  with_items: []
 
 - import_tasks: symlinks.yml
   become: no
