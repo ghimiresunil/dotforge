@@ -10,3 +10,4 @@
     - { src: "picom/.config/picom", dst: ".config/picom" }
     - { src: "rofi/.config/rofi", dst: ".config/rofi" }
     - { src: "nvim/.config/nvim", dst: ".config/nvim" }
+    - { src: "tmux/.tmux.conf", dst: ".tmux.conf" }
