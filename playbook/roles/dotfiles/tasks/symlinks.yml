@@ -15,3 +15,4 @@
         src: "bashrc/.config/bashrc/starship.toml",
         dst: ".config/starship.toml",
       }
+    - { src: "i3/.config/i3", dst: ".config/i3" }
