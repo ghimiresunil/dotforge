@@ -11,3 +11,7 @@
     - { src: "rofi/.config/rofi", dst: ".config/rofi" }
     - { src: "nvim/.config/nvim", dst: ".config/nvim" }
     - { src: "tmux/.tmux.conf", dst: ".tmux.conf" }
+    - {
+        src: "bashrc/.config/bashrc/starship.toml",
+        dst: ".config/starship.toml",
+      }
