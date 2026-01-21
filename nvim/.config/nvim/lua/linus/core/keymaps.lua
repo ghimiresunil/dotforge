@@ -32,6 +32,17 @@ keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) 
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
 
 -- Close the current buffer
+
+keymap.set("n", "<leader>bb", function()
+  require("bufferline").pick()
+end, { desc = "Pick buffer" })
+
+keymap.set("n", "<leader>bd", function()
+  require("bufferline").pick(function(bufnr)
+    vim.cmd("bdelete " .. bufnr)
+  end)
+end, { desc = "Pick buffer to close" })
+
 keymap.set("n", "<leader>bx", "<cmd>bdelete<CR>", { desc = "Close current buffer" })
 -- Go to next buffer
 keymap.set("n", "<leader>bn", "<cmd>BufferLineCycleNext<CR>", { desc = "Go to next buffer" })
