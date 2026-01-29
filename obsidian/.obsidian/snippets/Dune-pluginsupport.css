@@ -1,0 +1,184 @@
+/*----------------------------------------------------------------
+Dune PLUGIN SUPPORT
+----------------------------------------------------------------*/
+
+body {
+    --text-accent-special: #0080ff;
+    --soft-shadow: rgba(0, 0, 0, 0.1);
+    --light-tone: white;
+    --dark-tone: black;
+}
+
+
+/* 
+  advanced-tables
+  */
+
+body:not(.show-ui-btns) .advanced-tables-buttons>.nav-header>.nav-buttons-container {
+    opacity: 1;
+}
+
+.theme-light [data-type="advanced-tables-toolbar"] .nav-buttons-container .nav-action-button:hover {
+    background-color: var(--interactive-accent-rgb);
+}
+
+.theme-dark [data-type="advanced-tables-toolbar"] .nav-buttons-container .nav-action-button:hover {
+    background-color: var(--text-accent-special);
+}
+
+
+/* 
+  cal 
+  */
+
+.theme-light .year.svelte-1vwr9dd.svelte-1vwr9dd,
+.theme-light .today.svelte-q3wqg9 {
+    color: darkred;
+}
+
+.theme-dark .year.svelte-1vwr9dd.svelte-1vwr9dd,
+.theme-dark .today.svelte-q3wqg9 {
+    color: red;
+}
+
+
+/* 
+  Full Calendar 
+  */
+
+.fc-icon {
+    height: 0;
+    line-height: 0;
+}
+
+.fc .fc-button {
+    line-height: 0;
+}
+
+
+/* 
+  fantasy cal
+  */
+
+.OFCGDetails {
+    background-color: transparent;
+    border-radius: 6px;
+}
+
+
+/* 
+  time ruler 
+  */
+
+#time-ruler :is(.bg-accent) {
+    background-color: gray;
+    filter: contrast(2) saturate(0);
+}
+
+#time-ruler svg.svg-icon.lucide-plus {
+    stroke-width: 4px;
+}
+
+#time-ruler :is(.child\:h-full > *):last-child {
+    padding: 2px;
+}
+
+
+/* 
+  dataview 
+  */
+
+.block-language-dataview progress {
+    --background-secondary: transparent;
+}
+
+body:is(.uniform-width) .block-language-dataview .table-view-table {
+    width: 100%;
+}
+
+.callout .block-language-dataview table {
+    margin-bottom: 0 !important;
+    margin-top: 0;
+}
+
+div[data-callout="multi-column"].callout>.callout-content :is(.markdown-rendered blockquote) {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* 
+  kanban
+  */
+
+.kanban-plugin__item {
+    border: 0;
+}
+
+.kanban-plugin__item-button-wrapper {
+    border-top: 0;
+}
+
+.kanban-plugin__lane-header-wrapper {
+    border-bottom: 0;
+}
+
+button.kanban-plugin__new-item-button:hover {
+    color: var(--text-normal);
+}
+
+.theme-light .kanban-plugin__lane {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-dark .kanban-plugin__lane {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+button.kanban-plugin__new-item-button {
+    color: inherit;
+}
+
+
+/* 
+  dice roller
+  */
+
+.dice-roller.no-icon {
+    display: contents;
+}
+
+.dice-roller.has-embed .internal-embed {
+    padding: 0;
+}
+
+/* 
+  card view switcher 
+  */
+
+.modal-background.svelte-qhdq3h {
+    position: fixed;
+}
+
+/*
+  commander 
+  */
+
+.is-phone .cmdr-setting-modal>.modal {
+    height: revert;
+    width: revert;
+}
+
+
+/* 
+  obs camera (mobile) 
+  */
+
+.modal input[accept="image/*,video/*"]::before {
+    content: "\1F4F9";
+}
+
+.modal input[accept="image/*"]::before {
+    content: "\1F4F7";
+}

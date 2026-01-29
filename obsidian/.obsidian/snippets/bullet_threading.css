@@ -1,0 +1,234 @@
+body {
+  --outline-guideline-width: var(--size-2-1);
+  --outline-guideline-color: var(--accent-active);
+  --outline-item-height: calc(var(--nav-item-size) * 1.8);
+  /*active color*/
+  --accent-active: hsl(var(--accent-h),
+      var(--accent-s),
+      calc(var(--accent-l) + 4%));
+}
+
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item {
+  position: relative;
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-self {
+  position: relative;
+  margin-bottom: 0;
+  white-space: nowrap;
+  margin-top: -1px !important;
+  /* fix item gap */
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-self .tree-item-inner {
+  padding-left: var(--size-4-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: var(--outline-item-height);
+  line-height: var(--outline-item-height);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-self .tree-item-inner::before {
+  content: "";
+  width: var(--size-4-1);
+  height: var(--size-4-1);
+  border: var(--size-2-1) solid var(--outline-guideline-color);
+  border-radius: 50%;
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-self .tree-item-icon ~ .tree-item-inner {
+  padding-left: var(--size-4-1);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-self .tree-item-icon ~ .tree-item-inner::before {
+  content: none;
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item.is-collapsed .tree-item-icon::before {
+  box-shadow: 0 0 0 var(--size-4-1) var(--background-modifier-hover);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item::after {
+  content: "";
+  width: var(--outline-guideline-width);
+  position: absolute;
+  background-color: transparent;
+  top: calc(var(--outline-item-height) / 2 * -1);
+  left: -10px;
+  height: calc(100% - var(--outline-item-height) + var(--size-4-8));
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-icon {
+  cursor: pointer;
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-icon::before {
+  width: var(--size-4-2);
+  height: var(--size-4-2);
+  background-color: var(--outline-guideline-color);
+  border-radius: 50%;
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item-icon svg path {
+  display: none;
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item:hover > .tree-item-children > .tree-item::after {
+  background-color: var(--outline-guideline-color);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item:hover > .tree-item-self:hover + .tree-item-children .tree-item::after {
+  background-color: transparent;
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item:hover > .tree-item-children > .tree-item:hover::after, .workspace-leaf-content[data-type=outline] .view-content .outline .tree-item:hover > .tree-item-children > .tree-item:hover ~ .tree-item::after {
+  background-color: transparent;
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline .tree-item:hover > .tree-item-children > .tree-item:hover::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--outline-item-height) / 2 * -1);
+  left: -10px;
+  bottom: calc(100% - (var(--outline-item-height) + var(--size-4-2)) / 2 - 1px);
+  width: var(--size-4-4);
+  border-bottom-left-radius: var(--radius-m);
+  border-bottom: 3px solid var(--outline-guideline-color);
+  border-left: 3px solid var(--outline-guideline-color);
+}
+.workspace-leaf-content[data-type=outline] .view-content .outline :is(.tree-item-children, .tree-item-self .tree-item-self) {
+  padding-left: 0;
+  margin-left: var(--size-4-5);
+  border-left: none;
+}
+
+/* Threading for bullet */
+
+body {
+  --outline-guideline-width: var(--size-2-1);
+  --outline-guideline-color: var(--color-accent);
+  --outline-item-height: calc(var(--nav-item-size) * 1.8);
+}
+
+li {
+  position: relative;
+}
+
+/* In-between items */
+
+li:hover > ul > li:has(~li:hover)::before {
+  content: "";
+  width: var(--outline-guideline-width);
+  position: absolute;
+  background-color: var(--outline-guideline-color);
+  top: calc(var(--outline-item-height) / 2 * -1);
+  left: calc(-2px - 2em - var(--size-4-4));
+  height: calc(100% - var(--outline-item-height) + var(--size-4-8) + 2px);
+}
+
+/* Elbows items */
+
+li:hover > ul > li:hover::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--outline-item-height) / 2 * -1);
+  left: calc(-2px - 2em - var(--size-4-4));
+  bottom: calc(100% - (var(--outline-item-height) + var(--size-4-2)) / 2 + 1px);
+  width: calc(1em + var(--size-4-4) - 2px);
+  border-bottom-left-radius: var(--radius-m);
+  border-bottom: 3px solid var(--outline-guideline-color);
+  border-left: 3px solid var(--outline-guideline-color);
+}
+
+/* Editing mode bullet threading */
+.HyperMD-list-line-1:not(:has(~ .HyperMD-list-line-1 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4, .HyperMD-list-line-3, .HyperMD-list-line-2):hover)::after,
+.HyperMD-list-line-1:not(:has(~ .HyperMD-list-line-1 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-2:hover, ~ .HyperMD-list-line-2 ~ :is(.HyperMD-list-line-3, .HyperMD-list-line-4, .HyperMD-list-line-5, .HyperMD-list-line-6):hover)::before,
+.HyperMD-list-line-2:not(:has(~ .HyperMD-list-line-2 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-3, .HyperMD-list-line-4, .HyperMD-list-line-5, .HyperMD-list-line-6):hover))::before {
+  --list-threading-color: hsl(23, 100%, 45%, 0.3);
+  --list-threading-offset: calc(5px + 0.15em);
+}
+
+.HyperMD-list-line-2:not(:has(~ .HyperMD-list-line-2 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4, .HyperMD-list-line-3):hover)::after,
+.HyperMD-list-line-2:not(:has(~ .HyperMD-list-line-2 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-3:hover, ~ .HyperMD-list-line-3 ~ :is(.HyperMD-list-line-4, .HyperMD-list-line-5, .HyperMD-list-line-6):hover)::before,
+.HyperMD-list-line-3:not(:has(~ .HyperMD-list-line-3 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-4, .HyperMD-list-line-5, .HyperMD-list-line-6):hover))::before {
+  --list-threading-color: hsl(46, 100%, 45%, 0.3);
+  --list-threading-offset: calc(5px + 0.15em + var(--list-indent));
+}
+
+.HyperMD-list-line-3:not(:has(~ .HyperMD-list-line-3 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4):hover)::after,
+.HyperMD-list-line-3:not(:has(~ .HyperMD-list-line-3 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-4:hover, ~ .HyperMD-list-line-4 ~ :is(.HyperMD-list-line-5, .HyperMD-list-line-6):hover)::before,
+.HyperMD-list-line-4:not(:has(~ .HyperMD-list-line-4 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-5, .HyperMD-list-line-6):hover))::before {
+  --list-threading-color: hsl(70, 100%, 45%, 0.3);
+  --list-threading-offset: calc(5px + 0.15em + 2 * var(--list-indent));
+}
+
+.HyperMD-list-line-4:not(:has(~ .HyperMD-list-line-4 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5):hover)::after,
+.HyperMD-list-line-4:not(:has(~ .HyperMD-list-line-4 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-5:hover, ~ .HyperMD-list-line-5 ~ :is(.HyperMD-list-line-6):hover)::before,
+.HyperMD-list-line-5:not(:has(~ .HyperMD-list-line-5 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-6):hover))::before {
+  --list-threading-color: hsl(105, 100%, 45%, 0.3);
+  --list-threading-offset: calc(5px + 0.15em + 3 * var(--list-indent));
+}
+
+.HyperMD-list-line-5:not(:has(~ .HyperMD-list-line-5 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6):hover)::after,
+.HyperMD-list-line-5:not(:has(~ .HyperMD-list-line-5 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-6:hover)::before,
+.HyperMD-list-line-6:not(:has(~ .HyperMD-list-line-6 ~ .HyperMD-list-line:hover)):is(:hover)::before {
+  --list-threading-color: hsl(187, 100%, 45%, 0.3);
+  --list-threading-offset: calc(4px + 0.15em + 4 * var(--list-indent));
+}
+
+/* tails */
+.HyperMD-list-line-1:not(:has(~ .HyperMD-list-line-1 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4, .HyperMD-list-line-3, .HyperMD-list-line-2):hover)::after,
+.HyperMD-list-line-2:not(:has(~ .HyperMD-list-line-2 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4, .HyperMD-list-line-3):hover)::after,
+.HyperMD-list-line-3:not(:has(~ .HyperMD-list-line-3 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4):hover)::after,
+.HyperMD-list-line-4:not(:has(~ .HyperMD-list-line-4 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5):hover)::after,
+.HyperMD-list-line-5:not(:has(~ .HyperMD-list-line-5 ~ .HyperMD-list-line:hover)):has(~ :is(.HyperMD-list-line-6):hover)::after {
+  content: "";
+  position: absolute;
+  left: var(--list-threading-offset);
+  bottom: 0;
+  /* priority to wrapped text */
+  height: calc(100% - 0.75em);
+  /* priority to images */
+  height: 0.8em;
+  width: var(--size-2-1);
+  background-color: var(--list-threading-color);
+}
+.HyperMD-list-line.HyperMD-task-line::after {
+  /* priority to wrapped text */
+  max-height: calc(100% - 1.3em);
+  /* priority to images */
+  max-height: 0.275em;
+}
+
+/* in-between lines */
+.HyperMD-list-line-1:not(:has(~ .HyperMD-list-line-1 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-2:hover, ~ .HyperMD-list-line-2 ~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4, .HyperMD-list-line-3):hover)::before,
+.HyperMD-list-line-2:not(:has(~ .HyperMD-list-line-2 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-3:hover, ~ .HyperMD-list-line-3 ~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4):hover)::before,
+.HyperMD-list-line-3:not(:has(~ .HyperMD-list-line-3 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-4:hover, ~ .HyperMD-list-line-4 ~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5):hover)::before,
+.HyperMD-list-line-4:not(:has(~ .HyperMD-list-line-4 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-5:hover, ~ .HyperMD-list-line-5 ~ :is(.HyperMD-list-line-6):hover)::before,
+.HyperMD-list-line-5:not(:has(~ .HyperMD-list-line-5 ~ .HyperMD-list-line:hover)) ~ .HyperMD-list-line:has(~ .HyperMD-list-line-6:hover)::before {
+  content: "";
+  position: absolute;
+  left: var(--list-threading-offset);
+  top: 0;
+  height: 100%;
+  width: var(--size-2-1);
+  background-color: var(--list-threading-color);
+}
+
+/* elbows */
+.HyperMD-list-line-2:not(:has(~ .HyperMD-list-line-2 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4, .HyperMD-list-line-3):hover))::before,
+.HyperMD-list-line-3:not(:has(~ .HyperMD-list-line-3 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5, .HyperMD-list-line-4):hover))::before,
+.HyperMD-list-line-4:not(:has(~ .HyperMD-list-line-4 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-6, .HyperMD-list-line-5):hover))::before,
+.HyperMD-list-line-5:not(:has(~ .HyperMD-list-line-5 ~ .HyperMD-list-line:hover)):is(:hover, :has(~ :is(.HyperMD-list-line-6):hover))::before,
+.HyperMD-list-line-6:not(:has(~ .HyperMD-list-line-6 ~ .HyperMD-list-line:hover)):is(:hover)::before {
+  content: "";
+  position: absolute;
+  left: var(--list-threading-offset);
+  width: var(--list-indent);
+  top: 0;
+  /* priority to wrapped text */
+  height: calc(0.75em);
+  /* priority to images */
+  height: calc(100% - 0.825em - var(--size-2-1) / 2);
+  border-bottom-left-radius: var(--radius-m);
+  border-bottom: 3px solid var(--list-threading-color);
+  border-left: 3px solid var(--list-threading-color);
+}
+.HyperMD-list-line.HyperMD-task-line::before {
+  max-width: calc(var(--list-indent) - 0.35em);
+}
+

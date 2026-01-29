@@ -1,0 +1,11 @@
+/* Change text selection color */
+::selection {
+  background: #333;      /* Dark gray highlight */
+  color: #98ff98;  
+}
+
+/* For Firefox */
+::-moz-selection {
+  background: #333;      /* Dark gray highlight */
+  color: #98ff98;  
+}

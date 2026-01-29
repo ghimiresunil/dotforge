@@ -1,0 +1,20 @@
+{
+  "accentColor": "#f1ebff",
+  "theme": "obsidian",
+  "cssTheme": "AnuPpuccin",
+  "nativeMenus": false,
+  "enabledCssSnippets": [
+    "mermaid_css",
+    "custom-background",
+    "bullet_threading",
+    "clean-embeds",
+    "custom_kanagawa",
+    "Dune-pluginsupport",
+    "extended-colorschemes",
+    "hide_file_in_filetree",
+    "mermaid",
+    "text-selection",
+    "Dune-mermaid",
+    "custom-backgroud"
+  ]
+}

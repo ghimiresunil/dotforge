@@ -1,0 +1,9 @@
+
+/*
+    Fixes the arrowhead color in the element referenced by Mermaid sequence diagrams' marker-end attribute.
+    (The default is #333, which doesn't show up on dark backgrounds.)
+*/
+.mermaid [id$="arrowhead"] path {
+    fill: var(--text-muted) !important;
+    stroke: var(--text-muted) !important;
+}
