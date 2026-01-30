@@ -86,3 +86,104 @@ autocmd("BufWritePre", {
   pattern = "*",
   command = "%s/\\s\\+$//e",
 })
+
+-- Ruff formatter
+
+autocmd("BufWritePre", {
+  group = "bufcheck",
+  pattern = "*.py",
+  callback = function()
+    if fn.executable("ruff") == 1 then
+      local view = vim.fn.winsaveview()
+      vim.cmd("silent! %!ruff format -")
+      vim.fn.winrestview(view)
+    end
+  end,
+})
+
+-- Warn about mixed indendation
+autocmd({ "BufReadPost", "BufWritePost" }, {
+  group = "bufcheck",
+  pattern = "*.py",
+  callback = function()
+    if vim.bo.expandtab == false then
+      vim.notify("Python file with tabs?!", vim.log.levels.WARN)
+    end
+  end,
+})
+
+-- Highlight long lines (PEP8 guilt trip)
+
+autocmd("FileType", {
+  group = "bufcheck",
+  pattern = "python",
+  callback = function()
+    vim.opt_local.colorcolumn = "88"
+    vim.opt_local.formatoptions:append("t")
+  end,
+})
+
+-- Automatically set sane Python buffer options
+autocmd("FileType", {
+  group = "bufcheck",
+  pattern = "python",
+  callback = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+    vim.opt_local.textwidth = 88
+  end,
+})
+
+-- Auto-activate virtualenv (if present)
+
+autocmd("VimEnter", {
+  group = "bufcheck",
+  callback = function()
+    local venv = fn.findfile("pyproject.toml", ".;")
+    if venv ~= "" then
+      vim.env.VIRTUAL_ENV = fn.getcwd() .. "/.venv"
+      vim.env.PATH = vim.env.VIRTUAL_ENV .. "/bin:" .. vim.env.PATH
+    end
+  end,
+})
+
+-- Quick feedback after save (lint hint)
+
+autocmd("BufWritePost", {
+  group = "bufcheck",
+  pattern = "*.py",
+  callback = function()
+    if fn.executable("ruff") == 1 then
+      vim.fn.jobstart({ "ruff", "check", "--quiet", vim.fn.expand("%") })
+    end
+  end,
+})
+
+-- Automatically open folds around cursor (Python blocks!)
+
+autocmd("CursorMoved", {
+  group = "bufcheck",
+  pattern = "*.py",
+  command = "silent! foldopen",
+})
+
+-- Never think about directories again.
+
+autocmd("BufWritePre", {
+  group = "bufcheck",
+  callback = function()
+    local dir = fn.fnamemodify(fn.expand("<afile>"), ":p:h")
+    if fn.isdirectory(dir) == 0 then
+      fn.mkdir(dir, "p")
+    end
+  end,
+})
+
+-- Subtle but clutch: jump to first test failure
+
+autocmd("BufReadPost", {
+  group = "bufcheck",
+  pattern = "*pytest*.log",
+  command = "normal! gg/FAILED<CR>",
+})
