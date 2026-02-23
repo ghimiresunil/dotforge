@@ -21,12 +21,34 @@ main_setup() {
            --output $LAPTOP_DISPLAY --off
 }
 
+extend_displays() {
+    # Detect connected external monitor (not the laptop display)
+    EXTERNAL_DISPLAY=$(xrandr --query | grep " connected" | grep -v "^$LAPTOP_DISPLAY" | awk '{print $1}' | head -n1)
+
+    if [ -z "$EXTERNAL_DISPLAY" ]; then
+        notify-send "Monitor Setup" "No external monitor detected."
+        return
+    fi
+
+    # Get preferred resolution of external monitor
+    PREFERRED_MODE=$(xrandr | awk -v monitor="$EXTERNAL_DISPLAY" '
+        $0 ~ monitor {found=1}
+        found && /\*/ {print $1; exit}
+    ')
+
+    xrandr --output "$LAPTOP_DISPLAY" --auto --primary --pos 0x0 \
+           --output "$EXTERNAL_DISPLAY" --mode "$PREFERRED_MODE" --right-of "$LAPTOP_DISPLAY"
+
+    notify-send "Monitor Setup" "Dual setup enabled: $EXTERNAL_DISPLAY"
+}
+
 all_options() {
     OPTIONS=""
-    OPTIONS="${OPTIONS}1. Dual (Laptop + DP-2)\n"
-    OPTIONS="${OPTIONS}2. Laptop Only\n"
-    OPTIONS="${OPTIONS}3. External Only (DP-2)\n"
-    OPTIONS="${OPTIONS}4. Quit\n"
+    OPTIONS="${OPTIONS}1. Extend (Auto Detect External)\n"
+    OPTIONS="${OPTIONS}2. Dual (Laptop + DP-2)\n"
+    OPTIONS="${OPTIONS}3. Laptop Only\n"
+    OPTIONS="${OPTIONS}4. External Only (DP-2)\n"
+    OPTIONS="${OPTIONS}5. Quit\n"
 }
 
 options_menu() {
@@ -34,13 +56,15 @@ options_menu() {
     all_options
 
     case "$(printf "$OPTIONS" | rofi -dmenu -i -p 'Display Setup:')" in
-        '1. Dual (Laptop + DP-2)') dual_setup ;;
-        '2. Laptop Only') laptop_setup ;;
-        '3. External Only (DP-2)') main_setup ;;
-        '4. Quit') exit 0 ;;
+        '1. Extend (Auto Detect External)') extend_displays ;;
+        '2. Dual (Laptop + DP-2)') dual_setup ;;
+        '3. Laptop Only') laptop_setup ;;
+        '4. External Only (DP-2)') main_setup ;;
+        '5. Quit') exit 0 ;;
         *) exit 0 ;;
     esac
 }
+
 
 options_menu
 
