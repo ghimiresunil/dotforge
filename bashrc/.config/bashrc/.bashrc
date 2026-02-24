@@ -150,3 +150,9 @@ _fzf_comprun() {
 }
 
 
+# Start ssh-agent if not running and add keys
+if [ -z "$SSH_AUTH_SOCK" ] || ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/github_personal ~/.ssh/github_work
+fi
+
