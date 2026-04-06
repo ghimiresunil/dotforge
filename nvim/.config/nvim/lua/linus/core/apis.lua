@@ -19,7 +19,7 @@ autocmd("TextYankPost", {
   group = "bufcheck",
   pattern = "*",
   callback = function()
-    vim.highlight.on_yank({ timeout = 500 })
+    vim.hl.on_yank({ timeout = 500 })
   end,
 })
 
