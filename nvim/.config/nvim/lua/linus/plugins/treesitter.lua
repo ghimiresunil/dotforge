@@ -1,52 +1,61 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = { "BufReadPre", "BufNewFile" },
+  lazy = false,
   build = ":TSUpdate",
+  main = "nvim-treesitter.config",
+  cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
   dependencies = {
-    "windwp/nvim-ts-autotag", -- Safe to leave, but not necessary without HTML/JS
+    "nvim-treesitter/nvim-treesitter-textobjects",
   },
-  config = function()
-    local treesitter = require("nvim-treesitter.configs")
-
-    treesitter.setup({
-      -- Enable syntax highlighting
-      highlight = {
+  opts = {
+    ensure_installed = {
+      "python",
+      "lua",
+      "json",
+      "yaml",
+      "toml",
+      "markdown",
+      "markdown_inline",
+      "bash",
+      "dockerfile",
+      "gitignore",
+    },
+    auto_install = true,
+    highlight = {
+      enable = true,
+    },
+    indent = {
+      enable = true,
+    },
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "<C-space>",
+        node_incremental = "<C-space>",
+        scope_incremental = false,
+        node_decremental = "<bs>",
+      },
+    },
+    textobjects = {
+      select = {
         enable = true,
-      },
-      -- Enable indentation
-      indent = {
-        enable = true,
-      },
-      -- You can remove this if you're not using HTML/JSX/TSX
-      autotag = {
-        enable = false,
-      },
-      -- Install only parsers relevant to Python ML work
-      ensure_installed = {
-        "python",
-        "lua",
-        "json",
-        "yaml",
-        "toml",
-        "markdown",
-        "markdown_inline",
-        "bash",
-        "dockerfile",
-        "gitignore",
-      },
-      -- Enable incremental selection
-      incremental_selection = {
-        enable = true,
+        lookahead = true,
         keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
+          ["af"] = { query = "@function.outer", desc = "Select outer part of a function" },
+          ["if"] = { query = "@function.inner", desc = "Select inner part of a function" },
+          ["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
+          ["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
         },
       },
-      -- Optional: auto-install missing parsers
-      auto_install = true,
-    })
-  end,
+      swap = {
+        enable = true,
+        swap_next = {
+          ["<leader>xs"] = { query = "@parameter.inner", desc = "Swap with next" },
+        },
+        swap_previous = {
+          ["<leader>xS"] = { query = "@parameter.inner", desc = "Swap with previous" },
+        },
+      },
+    },
+  },
 }
-
