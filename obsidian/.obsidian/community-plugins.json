@@ -4,14 +4,15 @@
   "table-editor-obsidian",
   "calendar",
   "obsidian-linter",
-  "persistent-graph",
   "templater-obsidian",
   "dataview",
   "quickadd",
-  "obsidian-mind-map",
   "obsidian-icon-folder",
   "obsidian-style-settings",
   "excalibrain",
   "mermaid-tools",
-  "obsidian-git"
+  "obsidian-git",
+  "obsidian-zotero-desktop-connector",
+  "obsidian-outliner",
+  "excalidraw-extras"
 ]

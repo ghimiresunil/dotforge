@@ -4,17 +4,13 @@
   "cssTheme": "AnuPpuccin",
   "nativeMenus": false,
   "enabledCssSnippets": [
-    "mermaid_css",
-    "custom-background",
     "bullet_threading",
     "clean-embeds",
-    "custom_kanagawa",
     "Dune-pluginsupport",
+    "Dune-mermaid",
+    "mermaid",
     "extended-colorschemes",
     "hide_file_in_filetree",
-    "mermaid",
-    "text-selection",
-    "Dune-mermaid",
-    "custom-backgroud"
+    "text-selection"
   ]
 }

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .theme-light {
-  --text-normal: #433721;
+  /* --text-normal override removed: it was recoloring the whole vault */
   --mer-text: #000000;
   --mer-rect-1: #add8e6;
   --mer-rect-base: #d3d3d3;
@@ -49,7 +49,7 @@
 }
 
 .theme-dark {
-  --text-normal: #f3f2e9;
+  /* --text-normal override removed: it was recoloring the whole vault */
   --mer-text: #FFFFFF;
   --mer-rect-1: #add8e6;
   --mer-rect-base: #696969;

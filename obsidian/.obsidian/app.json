@@ -8,5 +8,14 @@
     "margin": "0",
     "downscalePercent": 100
   },
-  "showInlineTitle": true
+  "showInlineTitle": true,
+  "attachmentFolderPath": "./assets",
+  "newFileLocation": "current",
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": false,
+  "trashOption": "local",
+  "readableLineLength": true,
+  "strictLineBreaks": false,
+  "spellcheck": true,
+  "showUnsupportedFiles": false
 }

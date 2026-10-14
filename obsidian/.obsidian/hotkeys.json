@@ -8,7 +8,6 @@
       "key": "E"
     }
   ],
-  "obsidian-auto-link-title:enhance-url-with-title": [],
   "file-explorer:move-file": [
     {
       "modifiers": [
@@ -113,23 +112,6 @@
       "key": "G"
     }
   ],
-  "note-folder-autorename:make-folder-note": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "S"
-    }
-  ],
-  "sliding-panes-obsidian:toggle-sliding-panes-leaf-auto-width": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": ";"
-    }
-  ],
   "editor:toggle-bullet-list": [
     {
       "modifiers": [
@@ -137,14 +119,6 @@
         "Shift"
       ],
       "key": "B"
-    }
-  ],
-  "obsidian-admonition:insert-callout": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "C"
     }
   ],
   "app:open-vault": [
@@ -158,14 +132,6 @@
     }
   ],
   "editor:delete-paragraph": [],
-  "omnisearch:show-modal": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "O"
-    }
-  ],
   "workspace:new-tab": [],
   "workspace:toggle-stacked-tabs": [
     {
@@ -181,23 +147,6 @@
         "Ctrl"
       ],
       "key": "L"
-    }
-  ],
-  "workspaces:save-and-load": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "E"
-    }
-  ],
-  "readwise-official:readwise-official-sync": [
-    {
-      "modifiers": [
-        "Ctrl",
-        "Shift"
-      ],
-      "key": "R"
     }
   ],
   "obsidian-excalidraw-plugin:insert-link-to-element": [],
@@ -254,15 +203,6 @@
       "key": "0"
     }
   ],
-  "obsidian-focus-mode:toggle-focus-mode": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "Z"
-    }
-  ],
   "editor:toggle-blockquote": [
     {
       "modifiers": [
@@ -306,7 +246,6 @@
       "key": "="
     }
   ],
-  "ava:ava-generative-search": [],
   "editor:insert-wikilink": [
     {
       "modifiers": [
@@ -317,37 +256,12 @@
     }
   ],
   "app:open-help": [],
-  "mrj-jump-to-link:activate-jump-to-anywhere": [],
-  "mrj-jump-to-link:activate-jump-to-link": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "F"
-    }
-  ],
-  "obsidian-projects:show-projects": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "P"
-    }
-  ],
   "editor:fold-less": [
     {
       "modifiers": [
         "Ctrl"
       ],
       "key": "="
-    }
-  ],
-  "obsidian-day-planner:show-day-planner-today-note": [
-    {
-      "modifiers": [
-        "Mod"
-      ],
-      "key": "D"
     }
   ],
   "editor:open-search": [],
@@ -367,29 +281,12 @@
       "key": "Q"
     }
   ],
-  "obsidian-prozen:zenmode": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "Z"
-    }
-  ],
   "theme:switch": [
     {
       "modifiers": [
         "Ctrl"
       ],
       "key": "T"
-    }
-  ],
-  "obsidian-projects:show:7244edf8-282c-4645-ae1c-91948acf9b81": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "B"
     }
   ]
 }
