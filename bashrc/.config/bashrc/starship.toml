@@ -1,268 +1,314 @@
-# Move the directory to the second line
-"$schema" = 'https://starship.rs/config-schema.json'
-format = """
-$battery$directory$all$character
-"""
-right_format = ""
-add_newline = true
-continuation_prompt = '> '
-
-# A continuation prompt that displays two filled in arrows
-[character]
-success_symbol = "[->](bold green)"
-error_symbol = "[->](bold red)"
-vimcmd_symbol = "[->](bold green)"
 # ~/.config/starship.toml
+"$schema" = 'https://starship.rs/config-schema.json'
 
-[aws]
-symbol = "  "
-format = "\\[[$symbol($profile)(\\($region\\))(\\[$duration\\])]($style)\\]"
+# ───────────────────────────── Layout ─────────────────────────────
+# Line 1: context (os/user/host/dir/git) ── fill ── languages, duration, time
+# Line 2: jobs + prompt character
+format = """
+$os\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$git_metrics\
+$fill\
+$all\
+$cmd_duration\
+$battery\
+$time\
+$line_break\
+$jobs\
+$character"""
 
-[buf]
-disabled = true
-symbol = " "
+add_newline = true
+continuation_prompt = "[∙](bright-black) "
 
-[c]
-symbol = " "
-format = "\\[[$symbol($version(-$name))]($style)\\]"
+# pyenv shims are slow, so give commands more time (default is 500 ms)
+command_timeout = 2000
 
-[conda]
-symbol = " "
-format = "\\[[$symbol$environment]($style)\\]"
+# ─────────────────────────── Prompt core ──────────────────────────
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+vimcmd_replace_one_symbol = "[❮](bold purple)"
+vimcmd_replace_symbol = "[❮](bold purple)"
+vimcmd_visual_symbol = "[❮](bold yellow)"
 
-[crystal]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
+[fill]
+symbol = "─"
+style = "bright-black"
 
-[dart]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
+[os]
+disabled = false
+format = "\\[[$symbol]($style)\\]"
+
+[username]
+# Only shown on SSH or as root
+style_user = "bold yellow"
+style_root = "bold red"
+format = "\\[[$user]($style)\\]"
+
+[hostname]
+ssh_only = true
+ssh_symbol = " "
+format = "\\[[$ssh_symbol$hostname]($style)\\]"
 
 [directory]
+style = "bold cyan"
 read_only = " 󰌾"
 truncation_length = 4
-truncation_symbol = "..."
+truncation_symbol = "…/"
+truncate_to_repo = true
+format = "[$path]($style)[$read_only]($read_only_style) "
 repo_root_style = "bold underline green"
 repo_root_format = '[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '
 
 # [directory.substitutions]
-# "Documents" = "D"
-# "Downloads" = " "
-# "Music" = " "
-# "Pictures" = " "
-# "Videos" = " "
+# "Documents" = "󰈙 "
+# "Downloads" = " "
 # "Projects" = "󱌢 "
-# "School" = "󰑴 "
-# "www" = ""
-# ".config" = " "
+# ".config" = " "
 
-[docker_context]
-symbol = " "
-format = "\\[[$symbol$context]($style)\\]"
+[jobs]
+symbol = "✦"
+number_threshold = 1
+format = "[$symbol$number]($style) "
 
-[elixir]
-symbol = " "
-format = "\\[[$symbol($version \\(OTP $otp_version\\))]($style)\\]"
+[cmd_duration]
+min_time = 2000
+format = "\\[[⏱ $duration]($style)\\]"
 
-[elm]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[fennel]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-# [env_var.SHELL]
-# variable = 'SHELL'
-# style = "green"
-# format = "\\[[$env_value]($style)\\]"
-
-[fill]
-symbol = "─"
-
-[fossil_branch]
-symbol = " "
-format = "\\[[$symbol$branch]($style)\\]"
-
-[git_branch]
-symbol = " "
-format = "\\[[$symbol$branch]($style)\\]"
-
-[git_commit]
-only_detached = false
-format = "\\[[$hash$tag]($style)\\]"
-
-[git_metrics]
+[time]
 disabled = false
-format = "\\[[+$added]($added_style) [-$deleted]($deleted_style)\\]"
+time_format = "%H:%M"
+style = "bright-black"
+format = "\\[[$time]($style)\\]"
 
-[golang]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
+[battery]
+format = "\\[[$symbol$percentage]($style)\\]"
 
-[guix_shell]
-symbol = " "
-format = "\\[[$symbol]($style)\\]"
+[[battery.display]]
+threshold = 15
+style = "bold red"
 
-[haskell]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[haxe]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[hg_branch]
-symbol = " "
-format = "\\[[$symbol$branch]($style)\\]"
-
-[hostname]
-ssh_symbol = " "
-
-[java]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[julia]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[kotlin]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[lua]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
 
 [memory_usage]
+# Enable with `disabled = false`; only appears when RAM use crosses the threshold
+disabled = true
+threshold = 75
 symbol = "󰍛 "
 format = "\\[$symbol[$ram( | $swap)]($style)\\]"
 
-[meson]
-symbol = "󰔷 "
-format = "\\[[$symbol$project]($style)\\]"
+[sudo]
+disabled = true
+format = "\\[[as $symbol]($style)\\]"
+
+# ─────────────────────────────── Git ──────────────────────────────
+[git_branch]
+symbol = " "
+truncation_length = 32
+truncation_symbol = "…"
+format = "\\[[$symbol$branch(:$remote_branch)]($style)\\]"
+
+[git_commit]
+only_detached = true
+tag_disabled = false
+tag_symbol = " 🏷 "
+format = "\\[[$hash$tag]($style)\\]"
+
+[git_state]
+format = "\\[[$state( $progress_current/$progress_total)]($style)\\]"
+
+[git_status]
+disabled = false
+style = "bold red"
+format = "([\\[$all_status$ahead_behind\\]]($style))"
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+up_to_date = ""
+untracked = "?${count}"
+stashed = "≡"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[git_metrics]
+# Can be slow in huge repos; set disabled = true if you notice lag
+disabled = false
+ignore_submodules = true
+format = "(\\[[+$added]($added_style) [-$deleted]($deleted_style)\\])"
+
+[fossil_branch]
+symbol = " "
+format = "\\[[$symbol$branch]($style)\\]"
+
+[hg_branch]
+symbol = " "
+format = "\\[[$symbol$branch]($style)\\]"
+
+[pijul_channel]
+symbol = " "
+format = "\\[[$symbol$channel]($style)\\]"
+
+# ───────────────────────── Cloud / containers ─────────────────────
+[aws]
+symbol = "  "
+format = "\\[[$symbol($profile)(\\($region\\))(\\[$duration\\])]($style)\\]"
+
+[docker_context]
+symbol = " "
+only_with_files = true
+format = "\\[[$symbol$context]($style)\\]"
+
+[gcloud]
+# Only show when a gcloud project is actually active
+detect_env_vars = ["CLOUDSDK_CONFIG", "CLOUDSDK_ACTIVE_CONFIG_NAME"]
+format = "\\[[$symbol$account(@$domain)(\\($region\\))]($style)\\]"
+
+[kubernetes]
+disabled = false
+detect_files = ["k8s", "Chart.yaml", "kustomization.yaml", "skaffold.yaml"]
+format = "\\[[$symbol$context( \\($namespace\\))]($style)\\]"
+
+[openstack]
+format = "\\[[$symbol$cloud(\\($project\\))]($style)\\]"
+
+[pulumi]
+format = "\\[[$symbol$stack]($style)\\]"
+
+[terraform]
+format = "\\[[$symbol$workspace]($style)\\]"
+
+[nix_shell]
+symbol = " "
+format = "\\[[$symbol$state( \\($name\\))]($style)\\]"
+
+[guix_shell]
+symbol = " "
+format = "\\[[$symbol]($style)\\]"
+
+[conda]
+symbol = " "
+ignore_base = true
+format = "\\[[$symbol$environment]($style)\\]"
+
+[spack]
+format = "\\[[$symbol$environment]($style)\\]"
+
+# ───────────────────────────── Languages ──────────────────────────
+# Version removed so Starship doesn't run the slow pyenv shim.
+# To show it again: format = "\\[[${symbol}${pyenv_prefix}(${version})(\\($virtualenv\\))]($style)\\]"
+[python]
+symbol = " "
+format = "\\[[${symbol}${pyenv_prefix}(\\($virtualenv\\))]($style)\\]"
+
+[nodejs]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[rust]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[golang]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[c]
+symbol = " "
+format = "\\[[$symbol($version(-$name))]($style)\\]"
+
+[java]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[kotlin]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[lua]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[ruby]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[php]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[perl]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[dart]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[swift]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[scala]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[haskell]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[elixir]
+symbol = " "
+format = "\\[[$symbol($version \\(OTP $otp_version\\))]($style)\\]"
+
+[elm]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[crystal]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[fennel]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[haxe]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
+
+[julia]
+symbol = " "
+format = "\\[[$symbol($version)]($style)\\]"
 
 [nim]
 symbol = "󰆥 "
 format = "\\[[$symbol($version)]($style)\\]"
 
-[nix_shell]
-symbol = " "
-format = "\\[[$symbol$state( \\($name\\))]($style)\\]"
-
-[nodejs]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
 [ocaml]
-symbol = " "
+symbol = " "
 format = "\\[[$symbol($version)(\\($switch_indicator$switch_name\\))]($style)\\]"
 
-[os]
-format = "\\[[$symbol]($style)\\]"
-
-[os.symbols]
-Alpaquita = " "
-Alpine = " "
-AlmaLinux = " "
-Amazon = " "
-Android = " "
-Arch = " "
-Artix = " "
-CentOS = " "
-Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
-Garuda = "󰛓 "
-Gentoo = " "
-HardenedBSD = "󰞌 "
-Illumos = "󰈸 "
-Kali = " "
-Linux = " "
-Mabox = " "
-Macos = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-OpenBSD = "󰈺 "
-openSUSE = " "
-OracleLinux = "󰌷 "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-RockyLinux = " "
-Redox = "󰀘 "
-Solus = "󰠳 "
-SUSE = " "
-Ubuntu = " "
-Unknown = " "
-Void = " "
-Windows = "󰍲 "
-
-[package]
-symbol = "󰏗 "
-format = "\\[[$symbol$version]($style)\\]"
-
-[perl]
-symbol = " "
+[zig]
+symbol = " "
 format = "\\[[$symbol($version)]($style)\\]"
-
-[php]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[pijul_channel]
-symbol = " "
-format = "\\[[$symbol$channel]($style)\\]"
-
-[python]
-symbol = " "
-format = "\\[[${symbol}${pyenv_prefix}(${version})(\\($virtualenv\\))]($style)\\]"
 
 [rlang]
 symbol = "󰟔 "
-
-[ruby]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[rust]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[scala]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[swift]
-symbol = " "
-format = "\\[[$symbol($version)]($style)\\]"
-
-[zig]
-symbol = " "
 format = "\\[[$symbol($version)]($style)\\]"
 
 [bun]
-format = "\\[[$symbol($version)]($style)\\]"
-
-[cmake]
-format = "\\[[$symbol($version)]($style)\\]"
-
-[cmd_duration]
-format = "\\[[⏱ $duration]($style)\\]"
-
-[cobol]
-format = "\\[[$symbol($version)]($style)\\]"
-
-[daml]
 format = "\\[[$symbol($version)]($style)\\]"
 
 [deno]
@@ -274,31 +320,6 @@ format = "\\[[$symbol($version)(🎯 $tfm)]($style)\\]"
 [erlang]
 format = "\\[[$symbol($version)]($style)\\]"
 
-[gcloud]
-format = "\\[[$symbol$account(@$domain)(\\($region\\))]($style)\\]"
-
-[git_status]
-disabled = true
-format = "([\\[$all_status$ahead_behind\\]]($style))"
-
-[gradle]
-format = "\\[[$symbol($version)]($style)\\]"
-
-[helm]
-format = "\\[[$symbol($version)]($style)\\]"
-
-[kubernetes]
-format = "\\[[$symbol$context( \\($namespace\\))]($style)\\]"
-
-[opa]
-format = "\\[[$symbol($version)]($style)\\]"
-
-[openstack]
-format = "\\[[$symbol$cloud(\\($project\\))]($style)\\]"
-
-[pulumi]
-format = "\\[[$symbol$stack]($style)\\]"
-
 [purescript]
 format = "\\[[$symbol($version)]($style)\\]"
 
@@ -308,27 +329,88 @@ format = "\\[[$symbol($version-$vm_version)]($style)\\]"
 [red]
 format = "\\[[$symbol($version)]($style)\\]"
 
-[spack]
-format = "\\[[$symbol$environment]($style)\\]"
-
-[sudo]
-format = "\\[[as $symbol]($style)\\]"
-
-[terraform]
-format = "\\[[$symbol$workspace]($style)\\]"
-
-[time]
-format = "\\[[$time]($style)\\]"
-
-[username]
-format = "\\[[$user]($style)\\]"
-
-
-[vagrant]
-format = "\\[[$symbol($version)]($style)\\]"
-
 [vlang]
 format = "\\[[$symbol($version)]($style)\\]"
 
 [solidity]
 format = "\\[[$symbol($version)]($style)\\]"
+
+[cobol]
+format = "\\[[$symbol($version)]($style)\\]"
+
+[daml]
+format = "\\[[$symbol($version)]($style)\\]"
+
+# ───────────────────────── Build tools / misc ─────────────────────
+[package]
+symbol = "󰏗 "
+format = "\\[[$symbol$version]($style)\\]"
+
+[cmake]
+format = "\\[[$symbol($version)]($style)\\]"
+
+[meson]
+symbol = "󰔷 "
+format = "\\[[$symbol$project]($style)\\]"
+
+[gradle]
+format = "\\[[$symbol($version)]($style)\\]"
+
+[helm]
+format = "\\[[$symbol($version)]($style)\\]"
+
+[opa]
+format = "\\[[$symbol($version)]($style)\\]"
+
+[vagrant]
+format = "\\[[$symbol($version)]($style)\\]"
+
+[buf]
+disabled = true
+symbol = " "
+
+# ──────────────────────────── OS symbols ──────────────────────────
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
